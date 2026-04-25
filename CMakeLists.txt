@@ -2,13 +2,6 @@ cmake_minimum_required(VERSION 3.31)
 project(Snake)
 set(CMAKE_CXX_STANDARD 23)
 
-include(FetchContent)
-FetchContent_Declare(
-        SFML
-        GIT_REPOSITORY https://github.com/SFML/SFML.git
-        GIT_TAG 3.0.x
-)
-
 add_executable(
         Snake src/main.cpp
         src/Input.cpp
@@ -28,5 +21,11 @@ add_executable(
         src/Constants.hpp
 )
 
-FetchContent_MakeAvailable(SFML)
-target_link_libraries(Snake sfml-system sfml-window sfml-graphics sfml-audio sfml-network)
+find_package(SFML REQUIRED COMPONENTS Graphics Window System Audio Network)
+target_link_libraries(Snake PRIVATE
+        SFML::Graphics
+        SFML::Window
+        SFML::System
+        SFML::Audio
+        SFML::Network
+)

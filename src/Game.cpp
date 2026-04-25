@@ -1,5 +1,4 @@
 #include "../src/Game.hpp"
-
 #include <iostream>
 
 #include "Constants.hpp"
