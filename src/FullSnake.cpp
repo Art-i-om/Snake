@@ -1,14 +1,18 @@
 #include "FullSnake.hpp"
 
-#include <iostream>
+#include <algorithm>
+
+#include "Constants.hpp"
 
 FullSnake::FullSnake(SnakeHead *head)
     : head(head),
       direction({1, 0}),
       nextDirection({1, 0}),
       stepTimer(0.f),
-      stepInterval(0.15f),
-      cellSize(20.f),
+      stepInterval(GameConstants::BASE_STEP_INTERVAL),
+      cellSize(GameConstants::CELL_SIZE),
+      gridWidth(GameConstants::GRID_WIDTH),
+      gridHeight(GameConstants::GRID_HEIGHT),
       pendingGrowth(0)
 {
 
@@ -20,6 +24,10 @@ void FullSnake::setHead(SnakeHead *newHead) {
 
 void FullSnake::grow(int amount) {
     pendingGrowth += amount;
+}
+
+void FullSnake::setStepInterval(float newInterval) {
+    stepInterval = std::max(newInterval, GameConstants::MIN_STEP_INTERVAL);
 }
 
 sf::Vector2i FullSnake::getHeadCell() const {
@@ -57,7 +65,19 @@ void FullSnake::moveOneStep() {
 
     const sf::Vector2f oldHeadPos = head->getPosition();
     const sf::Vector2f delta{direction.x * cellSize, direction.y * cellSize};
-    const sf::Vector2f newHeadPos = oldHeadPos + delta;
+    sf::Vector2f newHeadPos = oldHeadPos + delta;
+
+    if (newHeadPos.x < 0.f) {
+        newHeadPos.x = (gridWidth - 1) * cellSize;
+    } else if (newHeadPos.x >= gridWidth * cellSize) {
+        newHeadPos.x = 0.f;
+    }
+
+    if (newHeadPos.y < 0.f) {
+        newHeadPos.y = (gridHeight - 1) * cellSize;
+    } else if (newHeadPos.y >= gridHeight * cellSize) {
+        newHeadPos.y = 0.f;
+    }
 
     std::vector<sf::Vector2f> oldBodyPos;
     oldBodyPos.reserve(body.size());
@@ -118,6 +138,7 @@ void FullSnake::reset() {
     direction = {1, 0};
     nextDirection = {1, 0};
     stepTimer = 0.f;
+    stepInterval = GameConstants::BASE_STEP_INTERVAL;
     pendingGrowth = 0;
 
     if (head) {

@@ -5,7 +5,7 @@ SnakePart::SnakePart(SnakePart *next, float cellSize, sf::Vector2f startPos)
 {
     shape.setSize({cellSize, cellSize});
     shape.setFillColor(sf::Color(120, 200, 120));
-    shape.setPosition(startPos);
+    setPosition(startPos);
 }
 
 void SnakePart::setPosition(const sf::Vector2f &pos) {

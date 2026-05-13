@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-#include "Input.hpp"
+#include <Input.hpp>
 #include "SnakeHead.hpp"
 #include "SnakePart.hpp"
 
@@ -15,6 +15,7 @@ public:
 
     void setHead(SnakeHead* newHead);
     void grow(int amount = 1);
+    void setStepInterval(float newInterval);
     sf::Vector2i getHeadCell() const;
     bool checkCollision() const;
     void reset();
@@ -34,6 +35,8 @@ private:
     float stepTimer;
     float stepInterval;
     float cellSize;
+    int gridWidth;
+    int gridHeight;
 
     int pendingGrowth;
 };
